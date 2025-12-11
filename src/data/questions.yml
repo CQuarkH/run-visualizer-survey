@@ -1,0 +1,22 @@
+- id: "escenario_1"
+  title: "Escenario 1: Fallo de Integración"
+  description: "Analiza la siguiente captura de Run Visualizer."
+  mediaSrc: "/assets/ex1.png"
+  questions:
+    - id: "s1_causa"
+      text: "¿Cuál crees que es la causa principal del fallo?"
+      type: "text"
+    - id: "s1_confianza"
+      text: "Del 1 al 5, ¿qué tan seguro estás?"
+      type: "scale"
+      min: 1
+      max: 5
+
+- id: "escenario_2"
+  title: "Escenario 2: Error de Dependencias"
+  description: "Observa el comportamiento del grafo."
+  mediaSrc: "/assets/ex2.png"
+  questions:
+    - id: "s2_causa"
+      text: "Describe el error observado"
+      type: "text"

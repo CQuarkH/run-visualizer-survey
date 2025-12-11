@@ -1,0 +1,11 @@
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import yaml from "@rollup/plugin-yaml";
+
+export default defineConfig({
+  plugins: [
+    react(),
+    yaml(), // Permite importar .yml como objetos JS
+  ],
+  base: "/run-visualizer-survey/",
+});
