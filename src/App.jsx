@@ -418,7 +418,7 @@ const ClosingPage = () => {
 // --- RUTEO PRINCIPAL ---
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/run-visualizer-survey">
       <Routes>
         <Route path="/" element={<ConsentPage />} />
         <Route path="/instructions" element={<InstructionsPage />} />
