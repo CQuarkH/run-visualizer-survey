@@ -23,7 +23,7 @@ const ConsentPage = () => {
   return (
     <div className="container">
       <div className="card">
-        <h1>Participación en Experimento</h1>
+        <h1>Participación en Experimento: Run Visualizer</h1>
         <p>
           Gracias por participar. Para comenzar, necesitamos tu correo
           electrónico.
@@ -120,6 +120,13 @@ const SurveyStepPage = () => {
     }
   };
 
+  const getImageUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    const cleanPath = path.startsWith("/") ? path.slice(1) : path;
+    return import.meta.env.BASE_URL + cleanPath;
+  };
+
   return (
     <div className="container">
       <p style={{ color: "#64748b" }}>
@@ -134,7 +141,7 @@ const SurveyStepPage = () => {
         <div className="media-container" style={{ marginBottom: "2rem" }}>
           {/* Fallback si no encuentra la imagen */}
           <img
-            src={data.mediaSrc}
+            src={getImageUrl(data.mediaSrc)}
             alt="Escenario del experimento"
             onError={(e) =>
               (e.target.src =
@@ -342,7 +349,17 @@ const SummaryPage = () => {
             className="btn"
             onClick={handleSubmit}
             disabled={isSubmitting}
-            style={{ width: "100%", padding: "1rem" }}
+            style={
+              isSubmitting
+                ? {
+                    opacity: 0.6,
+                    cursor: "not-allowed",
+                    width: "100%",
+                    padding: "1rem",
+                    animation: "pulse 2s infinite",
+                  }
+                : { width: "100%", padding: "1rem" }
+            }
           >
             {isSubmitting
               ? "Enviando respuestas..."
@@ -356,6 +373,7 @@ const SummaryPage = () => {
 
 // 3. Modifica el ClosingPage para enviar el email también
 const ClosingPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { userEmail } = useSurveyStore();
   const [interviewRequested, setInterviewRequested] = useState(false);
 
@@ -368,6 +386,7 @@ const ClosingPage = () => {
     };
 
     try {
+      setIsLoading(true);
       await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -377,6 +396,8 @@ const ClosingPage = () => {
     } catch (e) {
       console.error(e);
       alert("Hubo un pequeño error de conexión, pero gracias por tu interés.");
+    } finally {
+      setIsLoading(false);
     }
 
     setInterviewRequested(true);
@@ -401,8 +422,21 @@ const ClosingPage = () => {
             <p>
               ¿Estarías disponible para una breve entrevista de seguimiento?
             </p>
-            <button className="btn btn-outline" onClick={handleInterest}>
-              Sí, pueden contactarme
+            <button
+              className="btn btn-outline"
+              style={
+                isLoading
+                  ? {
+                      cursor: "not-allowed",
+                      opacity: 0.6,
+                      animation: "pulse 2s infinite",
+                    }
+                  : {}
+              }
+              onClick={handleInterest}
+              disabled={isLoading}
+            >
+              {isLoading ? "Registrando..." : "Sí, me interesa"}
             </button>
           </div>
         ) : (
